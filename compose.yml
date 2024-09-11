@@ -1,0 +1,32 @@
+version: '3'
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config", "/etc/otel/config.yaml", "--feature-gates=-component.UseLocalHostAsDefaultHost"]
+    volumes:
+      - ./otel-config.yaml:/etc/otel/config.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on: [zipkin, jaeger]
+    networks:
+      - opentelemetry
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    networks:
+      - opentelemetry
+
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - "16686:16686"
+    networks:
+      - opentelemetry
+
+networks:
+  opentelemetry:
+    name: opentelemetry
+    driver: bridge
