@@ -10,14 +10,16 @@ exporters:
   logging:
     verbosity: detailed
 
-  otlp:
-    endpoint: jaeger:4317
-    tls:
-      insecure: true  
+  # prometheus:
+  #   endpoint: prometheus:8888
+
+  # otlp:
+  #   endpoint: jaeger:4317
+  #   tls:
+  #     insecure: true
 
   zipkin:
     endpoint: "http://zipkin:9411/api/v2/spans"
-
 
 service:
   telemetry:
@@ -26,4 +28,4 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [logging, otlp, zipkin]
+      exporters: [logging, zipkin]
